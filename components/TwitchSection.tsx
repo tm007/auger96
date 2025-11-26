@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import TwitchActions from "./TwitchActions";
 
 interface TwitchData {
     isLive: boolean;
@@ -105,8 +106,11 @@ export default function TwitchSection() {
                     </div>
                 </div>
 
+                {/* Action Buttons */}
+                <TwitchActions />
+
                 {/* Schedule / Info */}
-                <div className="mt-6 grid grid-cols-1 gap-4 border-t border-zinc-900 pt-6">
+                <div className="mt-6 grid grid-cols-1 gap-4">
                     {/* VODs Section */}
                     <div className="p-4 border border-zinc-900 bg-zinc-950/50">
                         <h3 className="text-lg font-bold mb-3 text-white">RECENT VODS</h3>

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 
 const socials = [
+    { name: "DISCORD", url: "https://discord.com/invite/NFBNW34nKJ", color: "hover:bg-[#5865F2] active:bg-[#5865F2]", span: "col-span-2 md:col-span-3 lg:col-span-5" },
     { name: "YOUTUBE", url: "https://www.youtube.com/channel/UCMZx5j45AytavudrXKKeGlQ", color: "hover:bg-[#FF0000] active:bg-[#FF0000]", span: "" },
     { name: "TWITCH", url: "https://www.twitch.tv/auger", color: "hover:bg-[#9146FF] active:bg-[#9146FF]", span: "" },
     { name: "KICK", url: "https://kick.com/auger96", color: "hover:bg-[#53FC18] active:bg-[#53FC18]", span: "" },
@@ -14,7 +15,6 @@ const socials = [
     { name: "TIKTOK (@Auger96)", url: "https://www.tiktok.com/@ttvauger96", color: "hover:bg-[#000000] active:bg-[#000000]", span: "" },
     { name: "TIKTOK (@augeryalt)", url: "https://www.tiktok.com/@augeralt", color: "hover:bg-[#000000] active:bg-[#000000]", span: "" },
     { name: "AGR NYC", url: "https://agrnyc.com/", color: "hover:bg-[#800080] active:bg-[#800080]", span: "" },
-    { name: "DISCORD", url: "https://discord.com/invite/NFBNW34nKJ", color: "hover:bg-[#5865F2] active:bg-[#5865F2]", span: "col-span-2 md:col-span-3 lg:col-span-5" },
 ];
 
 export default function SocialLinks() {

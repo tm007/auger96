@@ -7,16 +7,18 @@ import { Play } from "lucide-react";
 export default function ContentFeed() {
     const [longFormVideos, setLongFormVideos] = useState<any[]>([]);
     const [shorts, setShorts] = useState<any[]>([]);
+    const [tiktokVideos, setTiktokVideos] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         async function fetchVideos() {
             try {
-                // Fetch long-form videos and shorts separately
-                const [longFormRes, shortsRes] = await Promise.all([
+                // Fetch long-form videos, shorts, and tiktok videos separately
+                const [longFormRes, shortsRes, tiktokRes] = await Promise.all([
                     fetch("/api/youtube"),
-                    fetch("/api/youtube-shorts")
+                    fetch("/api/youtube-shorts"),
+                    fetch("/api/tiktok")
                 ]);
 
                 if (longFormRes.ok) {
@@ -36,6 +38,14 @@ export default function ContentFeed() {
                     console.error("YouTube Shorts API request failed:", shortsRes.status, err);
                     // Don't overwrite main error if shorts fail, but log it
                     if (!error) setError(err.error || "Failed to load shorts");
+                }
+
+                if (tiktokRes.ok) {
+                    const data = await tiktokRes.json();
+                    setTiktokVideos(data);
+                } else {
+                    const err = await tiktokRes.json();
+                    console.error("TikTok API request failed:", tiktokRes.status, err);
                 }
             } catch (error) {
                 console.error("Failed to load YouTube videos", error);
@@ -156,29 +166,72 @@ export default function ContentFeed() {
                     </p>
                 </div>
 
-                {/* TikTok Feed - Manual/Placeholder as API is restricted */}
+                {/* TikTok Feed */}
                 <div>
                     <h2 className="text-3xl font-bold tracking-tight uppercase text-white mb-6">
                         Clips
                     </h2>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                        {[1, 2, 3, 4].map((i) => (
-                            <motion.div
-                                key={`tt-${i}`}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: i * 0.03 }}
-                                className="relative aspect-[9/16] bg-zinc-900 border border-zinc-800 group overflow-hidden flex items-center justify-center"
-                            >
-                                <div className="text-zinc-700 font-mono text-xs text-center px-2">
-                                    @AUGER96<br />CLIP_{i}
-                                </div>
-                                <div className="absolute bottom-2 right-2 text-[10px] font-mono text-zinc-600">
-                                    TIKTOK
-                                </div>
-                            </motion.div>
-                        ))}
+                        {loading ? (
+                            [1, 2, 3, 4].map((i) => (
+                                <div key={i} className="aspect-[9/16] bg-zinc-900 animate-pulse border border-zinc-800" />
+                            ))
+                        ) : (
+                            tiktokVideos.length > 0 ? (
+                                tiktokVideos.map((video: any, i: number) => (
+                                    <motion.a
+                                        key={video.id}
+                                        href={video.embed_link} // Or share_url if available, embed_link is usually the video link
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        initial={{ opacity: 0, y: 20 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ delay: i * 0.03 }}
+                                        className="relative aspect-[9/16] bg-zinc-900 border border-zinc-800 group overflow-hidden flex items-center justify-center cursor-pointer"
+                                    >
+                                        {video.cover_image_url ? (
+                                            <img
+                                                src={video.cover_image_url}
+                                                alt={video.title}
+                                                className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity"
+                                            />
+                                        ) : (
+                                            <div className="text-zinc-700 font-mono text-xs text-center px-2">
+                                                {video.title}
+                                            </div>
+                                        )}
+                                        <div className="absolute bottom-2 right-2 text-[10px] font-mono text-zinc-600 bg-black/50 px-1 rounded">
+                                            TIKTOK
+                                        </div>
+                                        {video.view_count && (
+                                            <div className="absolute top-2 left-2 text-[10px] font-mono text-white bg-black/50 px-1 rounded">
+                                                {video.view_count} views
+                                            </div>
+                                        )}
+                                    </motion.a>
+                                ))
+                            ) : (
+                                // Fallback if no API key or no videos
+                                [1, 2, 3, 4].map((i) => (
+                                    <motion.div
+                                        key={`tt-placeholder-${i}`}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ delay: i * 0.03 }}
+                                        className="relative aspect-[9/16] bg-zinc-900 border border-zinc-800 group overflow-hidden flex items-center justify-center"
+                                    >
+                                        <div className="text-zinc-700 font-mono text-xs text-center px-2">
+                                            @AUGER96<br />CLIP_{i}
+                                        </div>
+                                        <div className="absolute bottom-2 right-2 text-[10px] font-mono text-zinc-600">
+                                            TIKTOK
+                                        </div>
+                                    </motion.div>
+                                ))
+                            )
+                        )}
                     </div>
                     <p className="mt-3 text-xs font-mono text-zinc-600">
                         SOURCE: @Auger96, @augeryalt
