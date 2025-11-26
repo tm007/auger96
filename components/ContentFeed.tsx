@@ -8,6 +8,7 @@ export default function ContentFeed() {
     const [longFormVideos, setLongFormVideos] = useState<any[]>([]);
     const [shorts, setShorts] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         async function fetchVideos() {
@@ -22,14 +23,19 @@ export default function ContentFeed() {
                     const data = await longFormRes.json();
                     setLongFormVideos(data);
                 } else {
-                    console.error("YouTube API request failed:", longFormRes.status, longFormRes.statusText);
+                    const err = await longFormRes.json();
+                    console.error("YouTube API request failed:", longFormRes.status, err);
+                    setError(err.error || "Failed to load videos");
                 }
 
                 if (shortsRes.ok) {
                     const data = await shortsRes.json();
                     setShorts(data);
                 } else {
-                    console.error("YouTube Shorts API request failed:", shortsRes.status, shortsRes.statusText);
+                    const err = await shortsRes.json();
+                    console.error("YouTube Shorts API request failed:", shortsRes.status, err);
+                    // Don't overwrite main error if shorts fail, but log it
+                    if (!error) setError(err.error || "Failed to load shorts");
                 }
             } catch (error) {
                 console.error("Failed to load YouTube videos", error);
@@ -48,6 +54,11 @@ export default function ContentFeed() {
                     <h2 className="text-3xl font-bold tracking-tight uppercase text-white mb-6">
                         Videos
                     </h2>
+                    {error && (
+                        <div className="mb-4 p-4 bg-red-900/20 border border-red-900 text-red-200 font-mono text-xs">
+                            ERROR: {error}
+                        </div>
+                    )}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {loading ? (
                             [1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (

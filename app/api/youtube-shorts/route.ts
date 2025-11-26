@@ -13,7 +13,8 @@ export async function GET() {
     try {
         // Search specifically for Shorts using the shorts shelf
         const searchRes = await fetch(
-            `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet,id&order=date&maxResults=12&type=video&videoDuration=short`
+            `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet,id&order=date&maxResults=12&type=video&videoDuration=short`,
+            { next: { revalidate: 3600 } }
         );
         const searchData = await searchRes.json();
 
@@ -22,8 +23,8 @@ export async function GET() {
         }
 
         return NextResponse.json(searchData.items || []);
-    } catch (error) {
+    } catch (error: any) {
         console.error("YouTube Shorts API Error:", error);
-        return NextResponse.json({ error: "Failed to fetch YouTube Shorts" }, { status: 500 });
+        return NextResponse.json({ error: error.message || "Failed to fetch YouTube Shorts" }, { status: 500 });
     }
 }

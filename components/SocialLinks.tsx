@@ -8,6 +8,7 @@ const socials = [
     { name: "TWITCH", url: "https://www.twitch.tv/auger", color: "hover:bg-[#9146FF] active:bg-[#9146FF]", span: "" },
     { name: "KICK", url: "https://kick.com/auger96", color: "hover:bg-[#53FC18] active:bg-[#53FC18]", span: "" },
     { name: "PATREON", url: "https://www.patreon.com/cw/auger96", color: "hover:bg-[#FF424D] active:bg-[#FF424D]", span: "" },
+    { name: "SPOTIFY", url: "https://open.spotify.com/artist/2Wfjz6j58o9iADw66vQJss?si=5yadkMXVTZi_Ie-Q16EPZQ", color: "hover:bg-[#1DB954] active:bg-[#1DB954]", span: "" },
     { name: "X", url: "https://x.com/TTVauger", color: "hover:bg-black active:bg-black", span: "" },
     { name: "INSTAGRAM", url: "https://www.instagram.com/andrew_rancourt/", color: "hover:bg-[#E1306C] active:bg-[#E1306C]", span: "" },
     { name: "TIKTOK (@Auger96)", url: "https://www.tiktok.com/@auger96", color: "hover:bg-[#000000] active:bg-[#000000]", span: "" },

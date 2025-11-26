@@ -57,7 +57,7 @@ export async function GET() {
 
         // 2. Get User ID from username
         console.log(`Looking up user ID for username: ${username}`);
-        const userRes = await fetch(`https://api.twitch.tv/helix/users?login=${username}`, { headers });
+        const userRes = await fetch(`https://api.twitch.tv/helix/users?login=${username}`, { headers, next: { revalidate: 3600 } });
         const userData = await userRes.json();
         console.log("User data:", userData);
 
@@ -71,20 +71,20 @@ export async function GET() {
 
         // 3. Get Stream Status
         console.log("Fetching stream status...");
-        const streamRes = await fetch(`https://api.twitch.tv/helix/streams?user_id=${broadcasterId}`, { headers });
+        const streamRes = await fetch(`https://api.twitch.tv/helix/streams?user_id=${broadcasterId}`, { headers, next: { revalidate: 60 } });
         const streamData = await streamRes.json();
         console.log("Stream data:", streamData);
         const isLive = streamData.data && streamData.data.length > 0;
 
         // 3. Get Latest VODs
         console.log("Fetching VODs...");
-        const vodsRes = await fetch(`https://api.twitch.tv/helix/videos?user_id=${broadcasterId}&first=6&type=archive`, { headers });
+        const vodsRes = await fetch(`https://api.twitch.tv/helix/videos?user_id=${broadcasterId}&first=6&type=archive`, { headers, next: { revalidate: 300 } });
         const vodsData = await vodsRes.json();
         console.log("VODs data:", vodsData);
 
         // 4. Get Clips
         console.log("Fetching Clips...");
-        const clipsRes = await fetch(`https://api.twitch.tv/helix/clips?broadcaster_id=${broadcasterId}&first=8`, { headers });
+        const clipsRes = await fetch(`https://api.twitch.tv/helix/clips?broadcaster_id=${broadcasterId}&first=8`, { headers, next: { revalidate: 300 } });
         const clipsData = await clipsRes.json();
         console.log("Clips data:", clipsData);
 

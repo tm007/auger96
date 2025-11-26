@@ -14,7 +14,8 @@ export async function GET() {
     try {
         // First, get the list of videos (excluding shorts)
         const searchRes = await fetch(
-            `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet,id&order=date&maxResults=9&type=video&videoDuration=medium`
+            `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet,id&order=date&maxResults=9&type=video&videoDuration=medium`,
+            { next: { revalidate: 3600 } }
         );
         const searchData = await searchRes.json();
 
@@ -23,8 +24,8 @@ export async function GET() {
         }
 
         return NextResponse.json(searchData.items || []);
-    } catch (error) {
+    } catch (error: any) {
         console.error("YouTube API Error:", error);
-        return NextResponse.json({ error: "Failed to fetch YouTube data" }, { status: 500 });
+        return NextResponse.json({ error: error.message || "Failed to fetch YouTube data" }, { status: 500 });
     }
 }
