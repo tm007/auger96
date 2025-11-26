@@ -9,6 +9,8 @@ import ContentFeed from "@/components/ContentFeed";
 import TweetWall from "@/components/TweetWall";
 import Footer from "@/components/Footer";
 
+import NavigationSidebar from "@/components/NavigationSidebar";
+
 export default function Home() {
   const [loadingComplete, setLoadingComplete] = useState(false);
 
@@ -17,12 +19,23 @@ export default function Home() {
       {!loadingComplete && (
         <LoadingSequence onComplete={() => setLoadingComplete(true)} />
       )}
+      {loadingComplete && <NavigationSidebar />}
       <main className="min-h-screen">
-        <Hero />
-        <TwitchSection />
-        <SocialLinks />
-        <ContentFeed />
-        <TweetWall />
+        <section id="hero">
+          <Hero />
+        </section>
+        <section id="live">
+          <TwitchSection />
+        </section>
+        <section id="links">
+          <SocialLinks />
+        </section>
+        <section id="feed">
+          <ContentFeed />
+        </section>
+        <section id="tweets">
+          <TweetWall />
+        </section>
         <Footer />
       </main>
     </>

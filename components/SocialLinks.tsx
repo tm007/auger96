@@ -11,8 +11,8 @@ const socials = [
     { name: "SPOTIFY", url: "https://open.spotify.com/artist/2Wfjz6j58o9iADw66vQJss?si=5yadkMXVTZi_Ie-Q16EPZQ", color: "hover:bg-[#1DB954] active:bg-[#1DB954]", span: "" },
     { name: "X", url: "https://x.com/TTVauger", color: "hover:bg-black active:bg-black", span: "" },
     { name: "INSTAGRAM", url: "https://www.instagram.com/andrew_rancourt/", color: "hover:bg-[#E1306C] active:bg-[#E1306C]", span: "" },
-    { name: "TIKTOK (@Auger96)", url: "https://www.tiktok.com/@auger96", color: "hover:bg-[#000000] active:bg-[#000000]", span: "" },
-    { name: "TIKTOK (@augeryalt)", url: "https://www.tiktok.com/@augeryalt", color: "hover:bg-[#000000] active:bg-[#000000]", span: "" },
+    { name: "TIKTOK (@Auger96)", url: "https://www.tiktok.com/@ttvauger96", color: "hover:bg-[#000000] active:bg-[#000000]", span: "" },
+    { name: "TIKTOK (@augeryalt)", url: "https://www.tiktok.com/@augeralt", color: "hover:bg-[#000000] active:bg-[#000000]", span: "" },
     { name: "AGR NYC", url: "https://agrnyc.com/", color: "hover:bg-[#800080] active:bg-[#800080]", span: "" },
     { name: "DISCORD", url: "https://discord.com/invite/NFBNW34nKJ", color: "hover:bg-[#5865F2] active:bg-[#5865F2]", span: "col-span-2 md:col-span-3 lg:col-span-5" },
 ];
@@ -35,7 +35,7 @@ export default function SocialLinks() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.05 }}
-                            className={`group relative border border-zinc-800 bg-zinc-950 flex flex-col items-center justify-center transition-all duration-300 ${social.color} ${social.span} ${social.name === "DISCORD" ? "aspect-auto h-full min-h-[100px]" : "aspect-square"}`}
+                            className={`group relative border border-zinc-800 bg-zinc-950 flex flex-col items-center justify-center transition-all duration-300 ${social.color} ${social.span} ${social.name === "DISCORD" ? "h-[calc((100vw-2rem-0.75rem)/2*0.667)] md:h-[calc((100vw-3rem-1.5rem)/3*0.667)] lg:h-[calc((min(1280px,100vw)-3rem-3rem)/5*0.667)]" : "aspect-square"}`}
                         >
                             <span className="font-mono text-xs tracking-wider group-hover:text-white group-active:text-white transition-colors">
                                 {social.name}

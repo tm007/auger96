@@ -64,10 +64,9 @@ export default function LoadingSequence({ onComplete }: { onComplete: () => void
                                     }}
                                 >
                                     <span>AUGER</span>
-                                    <span className="text-zinc-600">96</span>
                                 </h1>
                                 <div className="text-xs sm:text-sm tracking-[0.8em] text-white/60 font-mono mt-2">
-                                    SYSTEM INITIALIZATION
+                                    AUGERBOT96 LOADING
                                 </div>
                             </motion.div>
 
@@ -89,10 +88,9 @@ export default function LoadingSequence({ onComplete }: { onComplete: () => void
 
                                 {/* System messages */}
                                 <div className="text-white/40 font-mono text-[10px] h-12 overflow-hidden">
-                                    {progress > 20 && <div>▸ INITIALIZING CORE SYSTEMS...</div>}
-                                    {progress > 40 && <div>▸ LOADING AUDIO/VISUAL MODULES...</div>}
-                                    {progress > 60 && <div>▸ ESTABLISHING NETWORK CONNECTIONS...</div>}
-                                    {progress > 80 && <div>▸ FINALIZING BOOT SEQUENCE...</div>}
+                                    {progress > 20 && <div>▸ CONNECTING TO AUGER-NET...</div>}
+                                    {progress > 40 && <div>▸ WE GOING LIVE...</div>}
+                                    {progress > 60 && <div>▸ I LOVE AUGER...</div>}
                                     {progress === 100 && <div className="text-white">▸ READY</div>}
                                 </div>
                             </div>
