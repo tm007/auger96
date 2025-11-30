@@ -8,7 +8,6 @@ interface TwitchData {
     isLive: boolean;
     vods: any[];
     clips: any[];
-    schedule: any[];
 }
 
 export default function TwitchSection() {
@@ -61,7 +60,7 @@ export default function TwitchSection() {
     }, []);
 
     return (
-        <section className="w-full py-12 px-4 md:px-6 border-t border-zinc-900">
+        <section className="w-full py-12 px-4 md:px-6">
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6">
@@ -74,9 +73,9 @@ export default function TwitchSection() {
                 </div>
 
                 {/* Main layout */}
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 h-[70vh]">
+                <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 lg:h-[70vh]">
                     {/* Stream player */}
-                    <div className="lg:col-span-3 bg-zinc-900 relative border border-zinc-800">
+                    <div className="lg:col-span-3 bg-zinc-900 relative border border-zinc-800 aspect-video lg:aspect-auto">
                         {embedUrl ? (
                             <iframe
                                 src={embedUrl}
@@ -91,8 +90,7 @@ export default function TwitchSection() {
                     </div>
 
                     {/* Chat sidebar */}
-                    <div className="lg:col-span-1 bg-black border border-zinc-800 flex flex-col">
-                        <div className="p-2 border-b border-zinc-800 bg-zinc-950 text-xs font-mono text-zinc-500">CHAT</div>
+                    <div className="lg:col-span-1 bg-black border border-zinc-800 flex flex-col h-[500px] lg:h-auto">
                         {chatUrl ? (
                             <iframe
                                 src={chatUrl}
@@ -138,6 +136,7 @@ export default function TwitchSection() {
                                         <div className="absolute bottom-0 left-0 w-full p-2 bg-black/80 text-[10px] font-mono truncate">
                                             {vod.title}
                                         </div>
+                                        <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/10 to-transparent z-20 pointer-events-none" />
                                     </a>
                                 ))
                             ) : (
@@ -174,6 +173,7 @@ export default function TwitchSection() {
                                         <div className="absolute bottom-0 left-0 w-full p-2 bg-black/80 text-[10px] font-mono truncate">
                                             {clip.title}
                                         </div>
+                                        <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/10 to-transparent z-20 pointer-events-none" />
                                         <div className="absolute top-2 right-2 text-[10px] font-mono bg-black/60 px-1">
                                             {clip.view_count?.toLocaleString()} views
                                         </div>

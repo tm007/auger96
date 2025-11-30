@@ -2,47 +2,74 @@ import { NextResponse } from "next/server";
 
 export const runtime = 'edge';
 
-
 export async function GET() {
     const bearerToken = process.env.TWITTER_BEARER_TOKEN;
-    const userId = "1076266667767664640"; // ttvauger96 ID (placeholder, needs lookup if incorrect)
 
     if (!bearerToken) {
+        console.error("Missing TWITTER_BEARER_TOKEN");
         return NextResponse.json({ error: "Missing Twitter Bearer Token" }, { status: 500 });
     }
 
     try {
-        // Fetch tweets from user timeline
-        const res = await fetch(
-            `https://api.twitter.com/2/users/${userId}/tweets?max_results=12&tweet.fields=created_at,text`,
-            {
-                headers: {
-                    "Authorization": `Bearer ${bearerToken}`
-                }
-            }
-        );
+        const username = "ttvauger";
+        console.log(`Fetching Twitter data for: ${username}`);
 
-        const data = await res.json();
+        // 1. Get User ID
+        const userUrl = `https://api.twitter.com/2/users/by/username/${username}`;
+        const userRes = await fetch(userUrl, {
+            headers: {
+                "Authorization": `Bearer ${bearerToken}`
+            },
+            next: { revalidate: 3600 }
+        });
 
-        console.log("Twitter API Response Status:", res.status);
-        console.log("Twitter API Response Data:", JSON.stringify(data, null, 2));
-
-        if (!res.ok) {
-            console.error("Twitter API Error Response:", data);
-            return NextResponse.json({ error: data.detail || data.title || "Twitter API request failed" }, { status: res.status });
+        if (!userRes.ok) {
+            const errorText = await userRes.text();
+            console.error(`Twitter User Lookup Failed: ${userRes.status} ${userRes.statusText}`, errorText);
+            throw new Error(`Twitter User Lookup Failed: ${userRes.status}`);
         }
 
-        if (data.errors) {
-            console.error("Twitter API returned errors:", data.errors);
-            throw new Error(data.errors[0].message);
+        const userData = await userRes.json();
+
+        if (userData.errors) {
+            console.error("Twitter User Lookup API Error:", JSON.stringify(userData.errors, null, 2));
+            throw new Error("Failed to lookup Twitter user: " + userData.errors[0].detail);
         }
 
-        const tweets = data.data || [];
-        console.log(`Returning ${tweets.length} tweets`);
+        if (!userData.data) {
+            console.error("Twitter User Lookup: No data returned", userData);
+            throw new Error("Twitter user not found");
+        }
 
-        return NextResponse.json(tweets);
-    } catch (error) {
+        const userId = userData.data.id;
+        console.log(`Found User ID: ${userId}`);
+
+        // 2. Get Tweets
+        const tweetsUrl = `https://api.twitter.com/2/users/${userId}/tweets?max_results=12&tweet.fields=created_at&exclude=retweets,replies`;
+        const tweetsRes = await fetch(tweetsUrl, {
+            headers: {
+                "Authorization": `Bearer ${bearerToken}`
+            },
+            next: { revalidate: 3600 }
+        });
+
+        if (!tweetsRes.ok) {
+            const errorText = await tweetsRes.text();
+            console.error(`Twitter Timeline Fetch Failed: ${tweetsRes.status} ${tweetsRes.statusText}`, errorText);
+            throw new Error(`Twitter Timeline Fetch Failed: ${tweetsRes.status}`);
+        }
+
+        const tweetsData = await tweetsRes.json();
+
+        if (tweetsData.errors) {
+            console.error("Twitter Timeline API Error:", JSON.stringify(tweetsData.errors, null, 2));
+            throw new Error("Failed to fetch tweets: " + tweetsData.errors[0].detail);
+        }
+
+        return NextResponse.json(tweetsData.data || []);
+
+    } catch (error: any) {
         console.error("Twitter API Error:", error);
-        return NextResponse.json({ error: "Failed to fetch Tweets" }, { status: 500 });
+        return NextResponse.json({ error: error.message || "Failed to fetch Twitter data" }, { status: 500 });
     }
 }

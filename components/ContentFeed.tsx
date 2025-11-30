@@ -14,7 +14,7 @@ export default function ContentFeed() {
     useEffect(() => {
         async function fetchVideos() {
             try {
-                // Fetch long-form videos, shorts, and tiktok videos separately
+                // Fetch long-form videos and shorts separately
                 const [longFormRes, shortsRes, tiktokRes] = await Promise.all([
                     fetch("/api/youtube"),
                     fetch("/api/youtube-shorts"),
@@ -42,10 +42,12 @@ export default function ContentFeed() {
 
                 if (tiktokRes.ok) {
                     const data = await tiktokRes.json();
-                    setTiktokVideos(data);
+                    // Ensure data is an array before setting
+                    if (Array.isArray(data)) {
+                        setTiktokVideos(data);
+                    }
                 } else {
-                    const err = await tiktokRes.json();
-                    console.error("TikTok API request failed:", tiktokRes.status, err);
+                    console.error("TikTok API request failed:", tiktokRes.status);
                 }
             } catch (error) {
                 console.error("Failed to load YouTube videos", error);
@@ -57,7 +59,7 @@ export default function ContentFeed() {
     }, []);
 
     return (
-        <section className="w-full py-12 px-4 md:px-6 border-t border-zinc-900">
+        <section className="w-full py-12 px-4 md:px-6">
             <div className="max-w-7xl mx-auto">
                 {/* Long-form Videos Section */}
                 <div className="mb-12">
@@ -69,7 +71,7 @@ export default function ContentFeed() {
                             ERROR: {error}
                         </div>
                     )}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                         {loading ? (
                             [1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
                                 <div key={i} className="aspect-video bg-zinc-900 animate-pulse border border-zinc-800" />
@@ -98,6 +100,7 @@ export default function ContentFeed() {
                                                 <Play className="w-6 h-6 text-white fill-white" />
                                             </div>
                                         </div>
+                                        <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/10 to-transparent z-20 pointer-events-none" />
                                         <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black to-transparent">
                                             <p className="text-xs font-mono text-white truncate">{video.snippet.title}</p>
                                         </div>
@@ -149,6 +152,7 @@ export default function ContentFeed() {
                                                 <Play className="w-5 h-5 text-white fill-white" />
                                             </div>
                                         </div>
+                                        <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/10 to-transparent z-20 pointer-events-none" />
                                         <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black to-transparent">
                                             <p className="text-[10px] font-mono text-white truncate">{video.snippet.title}</p>
                                         </div>
@@ -167,17 +171,17 @@ export default function ContentFeed() {
                 </div>
 
                 {/* TikTok Feed */}
-                <div>
-                    <h2 className="text-3xl font-bold tracking-tight uppercase text-white mb-6">
-                        Clips
-                    </h2>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                        {loading ? (
-                            [1, 2, 3, 4].map((i) => (
-                                <div key={i} className="aspect-[9/16] bg-zinc-900 animate-pulse border border-zinc-800" />
-                            ))
-                        ) : (
-                            tiktokVideos.length > 0 ? (
+                {tiktokVideos.length > 0 && (
+                    <div>
+                        <h2 className="text-3xl font-bold tracking-tight uppercase text-white mb-6">
+                            Clips
+                        </h2>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            {loading ? (
+                                [1, 2, 3, 4].map((i) => (
+                                    <div key={i} className="aspect-[9/16] bg-zinc-900 animate-pulse border border-zinc-800" />
+                                ))
+                            ) : (
                                 tiktokVideos.map((video: any, i: number) => (
                                     <motion.a
                                         key={video.id}
@@ -201,6 +205,7 @@ export default function ContentFeed() {
                                                 {video.title}
                                             </div>
                                         )}
+                                        <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/10 to-transparent z-20 pointer-events-none" />
                                         <div className="absolute bottom-2 right-2 text-[10px] font-mono text-zinc-600 bg-black/50 px-1 rounded">
                                             TIKTOK
                                         </div>
@@ -211,32 +216,13 @@ export default function ContentFeed() {
                                         )}
                                     </motion.a>
                                 ))
-                            ) : (
-                                // Fallback if no API key or no videos
-                                [1, 2, 3, 4].map((i) => (
-                                    <motion.div
-                                        key={`tt-placeholder-${i}`}
-                                        initial={{ opacity: 0, y: 20 }}
-                                        whileInView={{ opacity: 1, y: 0 }}
-                                        viewport={{ once: true }}
-                                        transition={{ delay: i * 0.03 }}
-                                        className="relative aspect-[9/16] bg-zinc-900 border border-zinc-800 group overflow-hidden flex items-center justify-center"
-                                    >
-                                        <div className="text-zinc-700 font-mono text-xs text-center px-2">
-                                            @AUGER96<br />CLIP_{i}
-                                        </div>
-                                        <div className="absolute bottom-2 right-2 text-[10px] font-mono text-zinc-600">
-                                            TIKTOK
-                                        </div>
-                                    </motion.div>
-                                ))
-                            )
-                        )}
+                            )}
+                        </div>
+                        <p className="mt-3 text-xs font-mono text-zinc-600">
+                            SOURCE: @Auger96, @augeryalt
+                        </p>
                     </div>
-                    <p className="mt-3 text-xs font-mono text-zinc-600">
-                        SOURCE: @Auger96, @augeryalt
-                    </p>
-                </div>
+                )}
             </div>
         </section>
     );

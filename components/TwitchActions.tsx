@@ -8,22 +8,22 @@ export default function TwitchActions() {
             label: "SUBSCRIBE",
             url: "https://www.twitch.tv/subs/auger",
             icon: Star,
-            color: "hover:bg-[#9146FF] hover:border-[#9146FF]",
-            textColor: "group-hover:text-white"
+            color: "hover:bg-[#9146FF] hover:border-[#9146FF] active:bg-[#9146FF] active:border-[#9146FF]",
+            textColor: "group-hover:text-white group-active:text-white"
         },
         {
             label: "FOLLOW",
             url: "https://www.twitch.tv/auger",
             icon: Heart,
-            color: "hover:bg-[#E91916] hover:border-[#E91916]",
-            textColor: "group-hover:text-white"
+            color: "hover:bg-[#E91916] hover:border-[#E91916] active:bg-[#E91916] active:border-[#E91916]",
+            textColor: "group-hover:text-white group-active:text-white"
         },
         {
             label: "DONATE",
             url: "https://streamlabs.com/auger/tip",
             icon: DollarSign,
-            color: "hover:bg-[#00E6CB] hover:border-[#00E6CB]",
-            textColor: "group-hover:text-black"
+            color: "hover:bg-[#00E6CB] hover:border-[#00E6CB] active:bg-[#00E6CB] active:border-[#00E6CB]",
+            textColor: "group-hover:text-black group-active:text-black"
         }
     ];
 

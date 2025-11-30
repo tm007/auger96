@@ -19,12 +19,12 @@ const socials = [
 
 export default function SocialLinks() {
     return (
-        <section className="w-full py-12 px-4 md:px-6 border-t border-zinc-900 bg-black">
+        <section className="w-full py-12 px-4 md:px-6 bg-black">
             <div className="max-w-7xl mx-auto">
                 <h2 className="text-3xl font-bold tracking-tight uppercase text-white mb-6">
                     Links
                 </h2>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+                <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-3">
                     {socials.map((social, index) => (
                         <motion.a
                             key={social.name}
